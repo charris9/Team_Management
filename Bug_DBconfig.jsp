@@ -3,6 +3,7 @@
     Created on : Feb 18, 2016, 8:26:33 PM
     Author     : caseyharris
 --%>
+
 <%@page import="java.sql.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -15,17 +16,22 @@
              Connection connection = null;
              PreparedStatement insertBug = null;
              PreparedStatement selectBug = null;
+             PreparedStatement selectBugTitle = null;
              ResultSet resultSet = null;
+             String resultString ="";
              
              public Bug()
              {
                  try
                  {
                     connection= DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                    insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title, Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added)"
-                        + "VALUES (?,?,?,?,?)");
-                    selectBug = connection.prepareCall("SELECT Bug_ID, Bug_title, Bug_Owner, Bug_Description, Bug_Priority, Bug_Date_Added From BugLog");
-                     
+                    insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title, Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added,Bug_Status)"
+                        + "VALUES (?,?,?,?,?,?)");
+                    selectBug = connection.prepareCall("SELECT Bug_ID, Bug_title, Bug_Owner,"
+                        + "Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status From BugLog");
+                    
+                    selectBugTitle = connection.prepareCall("SELECT Bug_title");
+                    
                  }
                  catch(SQLException e)
                  {
@@ -33,7 +39,7 @@
                  }
              }
              
-            public int setBugs(String addBug_Title, String addBug_Owner, String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added)
+            public int setBugs(String addBug_Title, String addBug_Owner, String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added, String addBug_Status)
             {
              int result=0;
              try {
@@ -42,6 +48,7 @@
                 insertBug.setString(3, addBug_Description);
                 insertBug.setString(4, addBug_Priority);
                 insertBug.setTimestamp(5, addBug_Date_Added);
+                insertBug.setString(6, addBug_Status);
                 result = insertBug.executeUpdate();
                 }   
                 catch(SQLException e)
@@ -51,7 +58,7 @@
             return result;
             }
         
-        public ResultSet getBug()
+            public ResultSet getBug()
              {
                  try
                  {
@@ -63,8 +70,23 @@
                  }
                  return resultSet;
              }
+            public String getBugTitle()
+             {
+                 try
+                 {
+                     resultSet = selectBugTitle.executeQuery();
+                     resultString=resultSet.getString("Bug_title");
+                 }
+                 catch(SQLException e)
+                 {
+                         e.printStackTrace();
+                 }
 
+                  
 
+                 return resultString;
+             }
+             
 
 
              

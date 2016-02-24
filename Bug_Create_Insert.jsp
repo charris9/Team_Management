@@ -1,5 +1,5 @@
 
-
+<%@include file = "Bug_DBconfig.jsp"%>
 <%@page import="java.sql.*"%>
 <%@page import="java.util.Date"%>
 <% Class.forName("com.mysql.jdbc.Driver");%>
@@ -9,58 +9,14 @@
     
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="style.css" type="text/css">
         <title>TestInsert</title>
     </head>
     
     
     <body onload="displayResults()">
-        <h1>Insert Data into a DB</h1>
-        <%!
-         public  class Bug
-         {
-             String URL="jdbc:mysql://localhost/Testing";
-             String USERNAME="root";
-             String PASSWORD ="password";
-             
-             Connection connection = null;
-             PreparedStatement insertBug = null;
-             ResultSet resultSet = null;
-             
-             public Bug()
-             {
-                 try
-                 {
-                    connection= DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                    insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title, Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added)"
-                        + "VALUES (?,?,?,?,?)");
-                 }
-                 catch(SQLException e)
-                 {
-                     e.printStackTrace();
-                 }
-             }
-             
-            public int setBugs(String addBug_Title, String addBug_Owner, String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added)
-            {
-             int result=0;
-             try {
-                insertBug.setString(1, addBug_Title);
-                insertBug.setString(2, addBug_Owner);
-                insertBug.setString(3, addBug_Description);
-                insertBug.setString(4, addBug_Priority);
-                insertBug.setTimestamp(5, addBug_Date_Added);
-                result = insertBug.executeUpdate();
-                }   
-                catch(SQLException e)
-                {
-                e.printStackTrace();
-                }
-            return result;
-            }
-             
-         }
-         %>
-         
+        
+        
         <%
             int results=0;
             
@@ -70,7 +26,7 @@
             String bug_owner = new String();
             String bug_description= new String();
             String bug_priority = new String();
-            
+            String bug_status = new String();
             
             
             if(request.getParameter("bug_title") != null)
@@ -89,17 +45,23 @@
             {
                 bug_priority = request.getParameter("bug_priority");
             }
-            
+            if(request.getParameter("bug_status") != null)
+            {
+                bug_priority = request.getParameter("bug_status");
+            }
            
             Date date =new Date();
             Timestamp bug_timestamp = new Timestamp(date.getTime());
+            
+            bug_status="INCOMPLETE";
             Bug addBug = new Bug();
             
-            results=addBug.setBugs(bug_title, bug_owner, bug_description, bug_priority, bug_timestamp);
+            results=addBug.setBugs(bug_title, bug_owner, bug_description, bug_priority, bug_timestamp, bug_status);
             } 
         %>
      
-        
+        <div class="main-window">
+        <h1>Insert Data into a DB</h1>
         <form name= "myform" action="Bug_Create_Insert.jsp" method="POST">
         
  
@@ -118,26 +80,22 @@
                     </tr>
                     <tr>
                         <td>Bug Description: </td>
-                        <td><textarea name="bug_description" rows="8" cols="48" >
-                            </textarea></td>
+                        <td><input type="text" name="bug_description" value = "" size="50"   /></td>
                     </tr>
+                
+                    
                     <tr>
                         <td>Select Priority</td>
                         <td><select name="bug_priority">
                                 <option>Easy</option>
                                 <option>Medium</option>
                                 <option>Hard</option>
-                                
+                                <option><%= results%></option>
                             </select></td>
                     </tr>
                   
                 </tbody>
             </table>
-            <%//if(request.getParameter("bug_title").isEmpty())
-                        {
-                            //System.out.println("sad");
-                        }%>
-            
             <a href="Buglog.jsp">
             <input type="button" value="Cancel" />
             </a>
@@ -145,8 +103,8 @@
             <input type="hidden" name="hidden" value="<%= results%>" />
             <input type="reset" value="Clear" name="Clear" />
             <input type="submit" value="Sumbit" name="Submit"  />
-          
-            
+          </div>  
+           
     
         </form>   
            

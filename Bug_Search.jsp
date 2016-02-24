@@ -1,25 +1,29 @@
 <%-- 
-    Document   : display
-    Created on : Feb 14, 2016, 12:05:43 PM
+    Document   : Get_Bug
+    Created on : Feb 23, 2016, 6:48:50 PM
     Author     : caseyharris
 --%>
 <%@include file ="Bug_DBconfig.jsp"%>
 <%@page import="java.sql.*"%>
-<%@page import = "java.util.Date" %>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <title>Bug Created</title>
+        <title>Searching DB</title>
     </head>
     <body>
-        <div class="main-window">
-        <h1>Bug Created!</h1>
-        <% Bug bug = new Bug();
-         ResultSet bugs=bug.getBug();%>
-         <% if (bugs.last()) { %>
+        
+        <%String bugTitle = request.getParameter("CGHJ").toString();
+         Bug bug = new Bug();
+         ResultSet bugs=bug.getBug();
+        
+   while(bugs.next())     
+   {
+       if (bugs.getString("Bug_Title").toString().trim().equals(bugTitle.trim())) { %>
+         <h1>Bug Found!</h1>
+         
        <table border="1">
                 
                 <tbody>
@@ -53,15 +57,15 @@
                 </tbody>
             </table>
         
-         <% } %>   
+         <% }}%>   
           
                     <a href="Bug_Create_Insert.jsp">
                     <input type="button" value="Add Another Bug"/>
                     </a>
          
-                    <a href="Buglog.jsp">
-                    <input type="button" value="Continue"/>
+                    <a href="Buglog_ViewDB.jsp">
+                    <input type="button" value="Back"/>
                     </a>
-                  </div>      
-   </body>
+                      
+</body>
 </html>
