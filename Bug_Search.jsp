@@ -2,6 +2,11 @@
     Document   : Get_Bug
     Created on : Feb 23, 2016, 6:48:50 PM
     Author     : caseyharris
+
+    The purpose of this JSP is to search the database for all the bug titles 
+    that match the one the user is looking for. It will then return each bug and
+    all their information.
+
 --%>
 <%@include file ="Bug_DBconfig.jsp"%>
 <%@page import="java.sql.*"%>
@@ -15,12 +20,13 @@
     </head>
     <body>
         
-        <%String bugTitle = request.getParameter("CGHJ").toString();
+        <%String bugTitle = request.getParameter("search_title").toString();
          Bug bug = new Bug();
          ResultSet bugs=bug.getBug();
-        
+   // iterating until end of database     
    while(bugs.next())     
    {
+       // if bug tilte matches the search bug title retrieve all information
        if (bugs.getString("Bug_Title").toString().trim().equals(bugTitle.trim())) { %>
          <h1>Bug Found!</h1>
          

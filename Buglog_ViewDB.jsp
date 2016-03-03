@@ -45,58 +45,31 @@
          ResultSet bugs=bug.getBug();%>
          <table border="1">
              <tbody>
-             
-             
-             
-                        <%-- 
-                         <tr>
-                             <td>Bug ID</td>
-                             <td>Title</td>
-                             <td>Owner</td>
-                             <td>Description</td>
-                             <td>Priority</td>
-                             <td>Date Created</td>
-                             
-                         </tr>
-                        --%>
-                        <tr>
-                          <td>Title</td>
-                          <td>Priority</td>
-                          <td>Date Created</td>
-                          <td>Status</td>
-                        </tr>
+                    <tr>
+                        <td>Title</td>
+                        <td>Priority</td>
+                        <td>Date Created</td>
+                        <td>Status</td>
+                    </tr>
                         
-                         <% while (bugs.next()) { %>
-                         <tr>
-                            <form name="Find_Bug" action="Bug_Search.jsp" method="POST">
-                             <td><input type="submit" 
-                                   style="height:25px; width:500px" 
-                                   value="<%= bugs.getString("Bug_Title") %> <%//+ <%= bugs.getString("Bug_Owner") %>" 
-                                   name="CGHJ"  /></td>
-                             </form>
+                    <% while (bugs.next()) 
+                    { %>
+                    <tr>
+                        <form name="Find_Bug" action="Bug_Search.jsp" method="POST">
+                            <td>
+                                <input type="submit" 
+                            style="height:25px; width:500px" 
+                            value="<%= bugs.getString("Bug_Title") %> "
+                            name="search_title"  />
+                            </td>
+                        </form>
                               
-                             <td><%= bugs.getString("Bug_Priority") %></td>
-                             <td><%= bugs.getString("Bug_Date_Added") %></td>
-                             <td><%= bugs.getString("Bug_Status") %></td>
-                         </tr>
-                            
-   
-                            <%-- 
-                            <tr>
-                             <td><%= bugs.getString("Bug_ID") %></td>
-                             <td><%= bugs.getString("Bug_Title") %></td>
-                             <td><%= bugs.getString("Bug_Owner") %></td>
-                             <td><%= bugs.getString("Bug_Description") %></td>
-                             <td><%= bugs.getString("Bug_Priority") %></td>
-                             <td><%= bugs.getString("Bug_Date_Added") %></td>
-                            </tr>
-                            --%>
-                         
-                         <%}%>
-                     </tbody>
-         </table>
-                              
-
-         
+                        <td><%= bugs.getString("Bug_Priority") %></td>
+                        <td><%= bugs.getString("Bug_Date_Added") %></td>
+                        <td><%= bugs.getString("Bug_Status") %></td>
+                    </tr>
+                   <%}%>
+            </tbody>
+        </table>
     </body>
 </html>
