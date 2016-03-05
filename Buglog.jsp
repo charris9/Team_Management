@@ -2,6 +2,8 @@
     Document   : Buglog
     Created on : Feb 14, 2016, 4:58:51 PM
     Author     : caseyharris
+
+    This purpose of this class to to serve as a directory for the Bug log
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -28,25 +30,8 @@
                         <input type="submit" value="View Bugs" name="View_Bug_Log" />
                         </form>
                     </td>
-                    <td>
-                        
-                        
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
             </tbody>
         </table>
-
-        
-        
-        
-         
-        
     </body>
 </html>

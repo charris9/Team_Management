@@ -1,4 +1,11 @@
+<%-- 
+    Document   : Bug_Create_Insert
+    Created on : Feb 14, 2016, 4:58:51 PM
+    Author     : caseyharris
 
+    This purpose of this class is to take the information from the user and push
+    is to the database. Then show the user that the last enter bug is theirs.
+--%>
 <%@include file = "Bug_DBconfig.jsp"%>
 <%@page import="java.sql.*"%>
 <%@page import="java.util.Date"%>
@@ -10,7 +17,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="style.css" type="text/css">
-        <title>TestInsert</title>
+        <title>Inserting</title>
     </head>
     
     
@@ -28,7 +35,7 @@
             String bug_priority = new String();
             String bug_status = new String();
             
-            
+           
             if(request.getParameter("bug_title") != null)
             {
                 bug_title = request.getParameter("bug_title");
@@ -90,7 +97,6 @@
                                 <option>Easy</option>
                                 <option>Medium</option>
                                 <option>Hard</option>
-                                <option><%= results%></option>
                             </select></td>
                     </tr>
                   
