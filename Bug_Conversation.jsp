@@ -47,11 +47,7 @@
             else
             {
                 results=addBugConvo.setBugConvo(addbug_id, addbugconvo_comment, addbugconvo_owner, bugconvo_timestamp);
-                %>
-                <script type="text/javascript">
-                    document.forms["add_comment"].submit();
-                </script>  
-                <%  
+                
             }
         }%>
         
