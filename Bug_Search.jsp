@@ -21,6 +21,7 @@
     <body>
         
         <%String bugTitle = request.getParameter("search_title").toString();
+         String bugid=null;
          Bug bug = new Bug();
          ResultSet bugs=bug.getBug();
    // iterating until end of database     
@@ -29,7 +30,7 @@
        // if bug tilte matches the search bug title retrieve all information
        if (bugs.getString("Bug_Title").toString().trim().equals(bugTitle.trim())) { %>
          <h1>Bug Found!</h1>
-         
+         <%//edt feature%>
        <table border="1">
                 
                 <tbody>
@@ -60,9 +61,24 @@
                         <td><%= bugs.getString("Bug_Date_Added") %></td>
                     </tr>
                     
+                    <form name="Bug_Convo" action="Bug_Conversation.jsp" method="POST">
+                            <td>
+                                <input type="submit" 
+                            style="height:25px; width:500px" 
+                            <%//value="View Conversation"%>
+                            
+                            value="<%= bugs.getString("Bug_ID") %> "
+                            name="search_bug_id"  />
+                            </td>
+                        </form>
+                    
+                    
+                    
                 </tbody>
             </table>
-        
+                    
+                    
+        <%//edt feature, view conversatiion%>
          <% }}%>   
           
                     <a href="Bug_Create_Insert.jsp">
@@ -72,6 +88,7 @@
                     <a href="Buglog_ViewDB.jsp">
                     <input type="button" value="Back"/>
                     </a>
+                    
                       
 </body>
 </html>

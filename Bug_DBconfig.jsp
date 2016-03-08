@@ -28,6 +28,10 @@
     PreparedStatement selectBugTitle = null;
     ResultSet resultSet = null;
     String resultString ="";
+
+    PreparedStatement insertBugConvo = null;
+    PreparedStatement selectBugConvo = null;
+    PreparedStatement selectBugConvo_Bug_ID = null;
 public Bug()
 {
     try
@@ -46,10 +50,20 @@ public Bug()
         insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title,Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added,Bug_Status)"
         + "VALUES (?,?,?,?,?,?)");
 
-        selectBug = connection.prepareCall("SELECT Bug_ID, Bug_title,Bug_Owner,Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status From BugLog");
+        selectBug = connection.prepareCall("SELECT Bug_ID, Bug_title,Bug_Owner,Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status From Buglog");
                     
-        selectBugTitle = connection.prepareCall("SELECT Bug_title");
-        }
+        selectBugTitle = connection.prepareCall("SELECT Bug_title From Buglog"); //Might want to add From BugLog 
+        
+    /*
+    This section deals with the interation of Bug with Converstions
+    */    
+        insertBugConvo = connection.prepareStatement("INSERT INTO Bug_Conversation(Bug_ID, Bug_Conversation_Comment, Bug_Conversation_Owner, Bug_Conversation_Time_Added)" + "VALUES (?,?,?,?)");
+
+       selectBugConvo = connection.prepareCall("SELECT Bug_Conversation_ID, Bug_ID,Bug_Conversation_Comment,Bug_Conversation_Owner, Bug_Conversation_Time_Added FROM Bug_Conversation");
+
+        selectBugConvo_Bug_ID = connection.prepareCall("SELECT Bug_ID From Bug_Conversation");
+
+}
               
     catch(SQLException e)
         {
@@ -100,7 +114,7 @@ public String getBugTitle()
     try
     {
         resultSet = selectBugTitle.executeQuery();
-        resultString=resultSet.getString("Bug_title");
+        resultString=resultSet.getString("Bug_title From Buglog");
     }
     catch(SQLException e)
     {
@@ -109,5 +123,61 @@ public String getBugTitle()
     
     return resultString;
 }
+
+
+public int setBugConvo(int addBug_ID, String addBugConvo_Comment,String addBugConvo_Owner, Timestamp addBug_Date_Added)
+{
+    int result=0;
+    try 
+    {
+        insertBugConvo.setInt(1, addBug_ID);
+        insertBugConvo.setString(2, addBugConvo_Comment);
+        insertBugConvo.setString(3, addBugConvo_Owner);
+        insertBugConvo.setTimestamp(4, addBug_Date_Added);
+        
+        result = insertBugConvo.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public ResultSet getBugConvo()
+{
+    try
+        {
+            resultSet = selectBugConvo.executeQuery();
+        }
+    catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    return resultSet;
+}
+
+
+
+// This Method retrieves the Bug Converstion from the Bug_Conversation in the Database
+public String getBugConvo_Bug_ID()
+{
+    try
+    {
+        resultSet = selectBugConvo_Bug_ID.executeQuery();
+        resultString=resultSet.getString("Bug_ID FROM Bug_Conversation");
+    }
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+    
+    return resultString;
+}
+
+
+
 }
 %>
