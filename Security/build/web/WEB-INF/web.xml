@@ -36,6 +36,7 @@
             <form-error-page>/loginError.html</form-error-page>
         </form-login-config>
     </login-config>
+          
     <security-role>
         <description>Users added to this role have access to the secureAdmin directory of the server.</description>
         <role-name>AdminRole</role-name>

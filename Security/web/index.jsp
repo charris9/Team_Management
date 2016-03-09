@@ -9,7 +9,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        
+        <title>Welcome</title>
     </head>
     <body>
         <p>Request a secure Admin page <a href="secureAdmin/pageA.html">here!</a></p>
