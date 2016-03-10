@@ -1,0 +1,28 @@
+SMAP
+Buglog_005fViewDB_jsp.java
+JSP
+*S JSP
+*F
++ 0 Buglog_ViewDB.jsp
+Buglog_ViewDB.jsp
++ 1 Bug_DBconfig.jsp
+Bug_DBconfig.jsp
+*L
+5:334
+13#1,6:335
+18,283:12
+300:340
+6#0,2:341
+8:343,2
+9,37:345
+46,3:383
+48,11:386
+59,3:398
+61,6:401
+67:407,3
+68,3:410
+71,3:413,3
+74:422
+75:423,3
+76,5:426
+*E
