@@ -11,7 +11,7 @@
 
 
 --%>
-
+<%@include file ="User_DBconfig.jsp"%>
 <%@page import="java.sql.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,6 +20,7 @@
     String URL="jdbc:mysql://localhost:3306/Testing";
     String USERNAME="root";
     String PASSWORD ="password";
+    User user = new User();
     
     // intialization of all variables
     Connection connection = null;
@@ -33,6 +34,7 @@
     PreparedStatement UpdateBugDescription=null;
     PreparedStatement UpdateBugPriority=null;
     PreparedStatement UpdateBugStatus=null;
+    PreparedStatement UpdateBugOwner=null;
     // might add date modified to here and DB
 
     PreparedStatement insertBugConvo = null;
@@ -67,7 +69,7 @@ public Bug()
         UpdateBugDescription = connection.prepareStatement("UPDATE Buglog SET Bug_Description = ? " + "WHERE Bug_ID = ?");
         UpdateBugPriority = connection.prepareStatement("UPDATE Buglog SET Bug_Priority = ? " + "WHERE Bug_ID = ?");
         UpdateBugStatus = connection.prepareStatement("UPDATE Buglog SET Bug_Status = ? " + "WHERE Bug_ID = ?");
-
+        UpdateBugOwner  = connection.prepareStatement("UPDATE Buglog SET Bug_Owner = ? " + "WHERE Bug_ID = ?");
 
 
 //SQl Statements------------------------BUG's Conversations---------------------------------
@@ -162,7 +164,24 @@ public int UpdateBugTitle(String UpdateBug_Title, String Bug_ID)
     return result;
 }
 
+public int UpdateBugOwner(String UpdateBug_Owner, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugOwner.setString(1, UpdateBug_Owner);
+        UpdateBugOwner.setString(2, Bug_ID);
+       
+        result = UpdateBugOwner.executeUpdate();
+    }   
 
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
 
 public int UpdateBugDescription(String UpdateBug_Description, String Bug_ID)
 {
@@ -294,6 +313,11 @@ public String getBugConvo_Bug_ID()
     return resultString;
 }
 
+public User get()
+{
+user = new User();
+return user;
+}
 
 
 }

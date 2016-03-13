@@ -5,17 +5,144 @@ import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import java.sql.*;
 import java.sql.*;
+import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
 public final class Bug_005fConversation_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
+ public  class User
+{
+    String URL2="jdbc:mysql://localhost:3306/Testing";
+    String USERNAME2="root";
+    String PASSWORD2 ="password";
+    
+    // intialization of all variables
+    Connection connection2 = null;
+    PreparedStatement insertUser = null;
+    PreparedStatement selectUser = null;
+    PreparedStatement selectUserName = null;
+    PreparedStatement UpdateUserName = null;
+    ResultSet resultSet = null;
+    String resultString ="";
+
+public User()
+{
+    try
+        {
+        // used to create a connection to the Database
+        connection2= DriverManager.getConnection(URL2, USERNAME2, PASSWORD2);
+        /*
+        all prepared statements are defined here
+        Criteria to add new prepared statement:
+        1) Create unique variable at the top of the bug class
+        2) Create a connect.prepareStatement(what the variable will do)
+        3) Create method that uses the new variable
+        */
+
+//SQl Statements------------------------User---------------------------------
+        insertUser=connection2.prepareStatement("INSERT INTO User(User_Name)"
+        + "VALUES (?)"); 
+
+        selectUser = connection2.prepareCall("SELECT User_ID, User_Name From User");
+        UpdateUserName = connection2.prepareStatement("UPDATE User SET User_Name = ? " + "WHERE User_ID = ? ");
+        
+
+
+
+    }
+              
+    catch(SQLException e)
+        {
+        e.printStackTrace();
+        }
+}
+
+    // Methods to Communcate to Database
+    // This methond takes the data a user has entered and pushes it to the Database
+
+//--------------------------------------BUG Log Methods-------------------------
+public int setUser(String addUser)
+{
+    int result=0;
+    try 
+    {
+        insertUser.setString(2, addUser);
+        
+        result = insertUser.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+            // This method retrives all the infromation associate with a specific Bug
+public ResultSet getUser()
+{
+    try
+        {
+            resultSet = selectUser.executeQuery();
+        }
+    catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    return resultSet;
+}
+
+// This Method retrieves the Bug Tilte from the Database
+public String getUserName()
+{
+    try
+    {
+        resultSet = selectUserName.executeQuery();
+        resultString=resultSet.getString("User_Name From User");
+    }
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+    
+    return resultString;
+}
+
+
+//---------------------------------SQL BUG Update Methods--------------------------------
+public int UpdateUserName(String updateUserName, String user_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateUserName.setString(1, updateUserName);
+        UpdateUserName.setString(2, user_ID);
+       
+        result = UpdateUserName.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+
+
+
+
+}
+
  public  class Bug
 {
     String URL="jdbc:mysql://localhost:3306/Testing";
     String USERNAME="root";
     String PASSWORD ="password";
+    User user = new User();
     
     // intialization of all variables
     Connection connection = null;
@@ -24,6 +151,13 @@ public final class Bug_005fConversation_jsp extends org.apache.jasper.runtime.Ht
     PreparedStatement selectBugTitle = null;
     ResultSet resultSet = null;
     String resultString ="";
+    
+    PreparedStatement UpdateBugTitle=null;
+    PreparedStatement UpdateBugDescription=null;
+    PreparedStatement UpdateBugPriority=null;
+    PreparedStatement UpdateBugStatus=null;
+    PreparedStatement UpdateBugOwner=null;
+    // might add date modified to here and DB
 
     PreparedStatement insertBugConvo = null;
     PreparedStatement selectBugConvo = null;
@@ -42,17 +176,26 @@ public Bug()
         3) Create method that uses the new variable
         */
 
-        //SQl Statements
+//SQl Statements------------------------BUG LOG---------------------------------
         insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title,Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added,Bug_Status)"
         + "VALUES (?,?,?,?,?,?)");
 
         selectBug = connection.prepareCall("SELECT Bug_ID, Bug_title,Bug_Owner,Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status From Buglog");
                     
         selectBugTitle = connection.prepareCall("SELECT Bug_title From Buglog"); //Might want to add From BugLog 
+
+            //---------------------------BUG LOG Updates--------------------------
+
+
+        UpdateBugTitle = connection.prepareStatement("UPDATE Buglog SET Bug_Title = ? " + "WHERE Bug_ID = ? ");
+        UpdateBugDescription = connection.prepareStatement("UPDATE Buglog SET Bug_Description = ? " + "WHERE Bug_ID = ?");
+        UpdateBugPriority = connection.prepareStatement("UPDATE Buglog SET Bug_Priority = ? " + "WHERE Bug_ID = ?");
+        UpdateBugStatus = connection.prepareStatement("UPDATE Buglog SET Bug_Status = ? " + "WHERE Bug_ID = ?");
+        UpdateBugOwner  = connection.prepareStatement("UPDATE Buglog SET Bug_Owner = ? " + "WHERE Bug_ID = ?");
+
+
+//SQl Statements------------------------BUG's Conversations---------------------------------
         
-    /*
-    This section deals with the interation of Bug with Converstions
-    */    
         insertBugConvo = connection.prepareStatement("INSERT INTO Bug_Conversation(Bug_ID, Bug_Conversation_Comment, Bug_Conversation_Owner, Bug_Conversation_Time_Added)" + "VALUES (?,?,?,?)");
 
        selectBugConvo = connection.prepareCall("SELECT Bug_Conversation_ID, Bug_ID,Bug_Conversation_Comment,Bug_Conversation_Owner, Bug_Conversation_Time_Added FROM Bug_Conversation");
@@ -69,6 +212,8 @@ public Bug()
 
     // Methods to Communcate to Database
     // This methond takes the data a user has entered and pushes it to the Database
+
+//--------------------------------------BUG Log Methods-------------------------
 public int setBugs(String addBug_Title, String addBug_Owner,String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added, String addBug_Status)
 {
     int result=0;
@@ -121,6 +266,123 @@ public String getBugTitle()
 }
 
 
+//---------------------------------SQL BUG Update Methods--------------------------------
+public int UpdateBugTitle(String UpdateBug_Title, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugTitle.setString(1, UpdateBug_Title);
+        UpdateBugTitle.setString(2, Bug_ID);
+       
+        result = UpdateBugTitle.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int UpdateBugOwner(String UpdateBug_Owner, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugOwner.setString(1, UpdateBug_Owner);
+        UpdateBugOwner.setString(2, Bug_ID);
+       
+        result = UpdateBugOwner.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int UpdateBugDescription(String UpdateBug_Description, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugDescription.setString(1, UpdateBug_Description);
+        UpdateBugDescription.setString(2, Bug_ID);
+       
+        result = UpdateBugDescription.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int UpdateBugPriority(String UpdateBug_Priority, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugPriority.setString(1, UpdateBug_Priority);
+        UpdateBugPriority.setString(2, Bug_ID);
+       
+        result = UpdateBugPriority.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int UpdateBugStatus(String UpdateBug_Status, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugStatus.setString(1, UpdateBug_Status);
+        UpdateBugStatus.setString(2, Bug_ID);
+       
+        result = UpdateBugStatus.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//--------------------------------BUG Conversation Methods--------------------------------
 public int setBugConvo(int addBug_ID, String addBugConvo_Comment,String addBugConvo_Owner, Timestamp addBug_Date_Added)
 {
     int result=0;
@@ -173,6 +435,11 @@ public String getBugConvo_Bug_ID()
     return resultString;
 }
 
+public User get()
+{
+user = new User();
+return user;
+}
 
 
 }
@@ -182,8 +449,9 @@ public String getBugConvo_Bug_ID()
   private static java.util.List<String> _jspx_dependants;
 
   static {
-    _jspx_dependants = new java.util.ArrayList<String>(1);
+    _jspx_dependants = new java.util.ArrayList<String>(2);
     _jspx_dependants.add("/Bug_DBconfig.jsp");
+    _jspx_dependants.add("/User_DBconfig.jsp");
   }
 
   private org.glassfish.jsp.api.ResourceInjector _jspx_resourceInjector;
@@ -217,7 +485,14 @@ public String getBugConvo_Bug_ID()
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
       out.write('\n');
+      out.write('\n');
       out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write('\n');
       out.write("\n");
       out.write("\n");
       out.write("\n");
@@ -234,9 +509,13 @@ public String getBugConvo_Bug_ID()
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
       out.write("        ");
 
-            String bugid = request.getParameter("search_bug_id").toString();
+            // for debug switch bugid = "1";//
+            String bugid = "1";//request.getParameter("search_bug_id").toString();
             String Bug_Name=null;
+            String Bug_Description=null;
             Bug bug = new Bug();
+            String UserName=null;
+            ResultSet Userretrieve=bug.user.getUser();
             ResultSet bugtitleretrieve=bug.getBug();
             
             while(bugtitleretrieve.next())
@@ -244,11 +523,12 @@ public String getBugConvo_Bug_ID()
                 if(bugtitleretrieve.getString("Bug_ID").toString().trim().equals(bugid.trim()))
                 {
                     Bug_Name = bugtitleretrieve.getString("Bug_Title");
+                    Bug_Description = bugtitleretrieve.getString("Bug_Description");
                 }
             }
         
       out.write("\n");
-      out.write("        <title>< Bug Conversation</title>\n");
+      out.write("        <title>Bug Conversation</title>\n");
       out.write("    </head>\n");
       out.write("    \n");
       out.write("    <body>\n");
@@ -274,12 +554,9 @@ public String getBugConvo_Bug_ID()
                 
                 addbug_id=Integer.parseInt(bugid);
                 
-                if(bugconvo_comment.equals(bugconvo_owner))// will need to change this parameter
+                if(!bugconvo_comment.equals(bugconvo_owner))// will need to change this parameter
                 {
-                    
-                }
-                else
-                {
+                
                 results=bug.setBugConvo(addbug_id, bugconvo_comment, bugconvo_owner, bugconvo_timestamp);
                 }
             }
@@ -287,37 +564,39 @@ public String getBugConvo_Bug_ID()
       out.write("\n");
       out.write("        \n");
       out.write("        <h1>");
-      out.print( Bug_Name );
-      out.write(" Conversation</h1>\n");
-      out.write("        \n");
+      out.print(Bug_Name );
+      out.write("'s Conversation</h1>\n");
+      out.write("        <h2>Description</h2>\n");
+      out.write("        <h2>");
+      out.print(Bug_Description );
+      out.write("</h2>\n");
       out.write("        <form name=\"Reload\" action=\"Bug_Conversation\">\n");
       out.write("            ");
  
                 while(bugsconvo.next())     
                 {// if bug tilte matches the search bug title retrieve all information
-                    if (bugsconvo.getString("Bug_ID").toString().trim().equals(bugid.trim())) 
-                        {
-                            
-                        }
+                    if (bugsconvo.getString("Bug_ID").toString().trim().equals(bugid.trim()))
+                    {
             
       out.write("\n");
-      out.write("                            <table border=\"0\">\n");
-      out.write("                                <tbody>\n");
-      out.write("                                    <tr>\n");
-      out.write("                                        <td>");
+      out.write("                        <table border=\"0\">\n");
+      out.write("                            <tbody>\n");
+      out.write("                                <tr>\n");
+      out.write("                                    <td>");
       out.print( bugsconvo.getString("Bug_Conversation_Comment") );
       out.write("</td>\n");
-      out.write("                                        <td>");
+      out.write("                                    <td>");
       out.print( bugsconvo.getString("Bug_Conversation_Owner") );
       out.write("</td>\n");
-      out.write("                                        <td>");
+      out.write("                                    <td>");
       out.print( bugsconvo.getString("Bug_Conversation_Time_Added") );
       out.write("</td>\n");
-      out.write("                                    </tr>\n");
-      out.write("                                </tbody>\n");
-      out.write("                            </table>\n");
+      out.write("                                </tr>\n");
+      out.write("                            </tbody>\n");
+      out.write("                        </table>\n");
       out.write("            ");
 
+                    }
                 }//}
             
       out.write("\n");
@@ -325,7 +604,24 @@ public String getBugConvo_Bug_ID()
       out.write("        \n");
       out.write("        <form name=\"add_comment\" action=\"Bug_Conversation.jsp\" method=\"POST\">\n");
       out.write("            <input type=\"text\" name=\"comment\"/>\n");
-      out.write("            <input type=\"text\" name=\"owner\" />\n");
+      out.write("            <select name=\"owner\">\n");
+      out.write("                <option></option>\n");
+      out.write("                ");
+
+                   while (Userretrieve.next())
+                   {
+                       UserName= Userretrieve.getString("User_Name"); 
+                 
+      out.write(" \n");
+      out.write("                <option>");
+      out.print(UserName );
+      out.write("</option>\n");
+      out.write("                ");
+
+                    }
+                
+      out.write(" \n");
+      out.write("            </select>\n");
       out.write("            <input type=\"hidden\" name=\"hidden\" value=\"");
       out.print( results);
       out.write("\" />\n");
@@ -342,6 +638,7 @@ public String getBugConvo_Bug_ID()
       out.write("\n");
       out.write("                <script type=\"text/javascript\">\n");
       out.write("                    document.forms[\"add_comment\"].submit();\n");
+      out.write("                    document.getElementById( 'bottom' ).scrollIntoView();\n");
       out.write("                </script> \n");
       out.write("            ");
     
@@ -349,6 +646,7 @@ public String getBugConvo_Bug_ID()
             
       out.write("\n");
       out.write("        </form>\n");
+      out.write("        \n");
       out.write("        <a href=\"Buglog_ViewDB.jsp\">\n");
       out.write("            <input type=\"button\" value=\"Back\"/>\n");
       out.write("        </a>\n");
