@@ -24,6 +24,12 @@ public final class Bug_005fConversation_jsp extends org.apache.jasper.runtime.Ht
     PreparedStatement selectBugTitle = null;
     ResultSet resultSet = null;
     String resultString ="";
+    
+    PreparedStatement UpdateBugTitle=null;
+    PreparedStatement UpdateBugDescription=null;
+    PreparedStatement UpdateBugPriority=null;
+    PreparedStatement UpdateBugStatus=null;
+    // might add date modified to here and DB
 
     PreparedStatement insertBugConvo = null;
     PreparedStatement selectBugConvo = null;
@@ -42,17 +48,26 @@ public Bug()
         3) Create method that uses the new variable
         */
 
-        //SQl Statements
+//SQl Statements------------------------BUG LOG---------------------------------
         insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title,Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added,Bug_Status)"
         + "VALUES (?,?,?,?,?,?)");
 
         selectBug = connection.prepareCall("SELECT Bug_ID, Bug_title,Bug_Owner,Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status From Buglog");
                     
         selectBugTitle = connection.prepareCall("SELECT Bug_title From Buglog"); //Might want to add From BugLog 
+
+            //---------------------------BUG LOG Updates--------------------------
+
+
+        UpdateBugTitle = connection.prepareStatement("UPDATE Buglog SET Bug_Title = ? " + "WHERE Bug_ID = ? ");
+        UpdateBugDescription = connection.prepareStatement("UPDATE Buglog SET Bug_Description = ? " + "WHERE Bug_ID = ?");
+        UpdateBugPriority = connection.prepareStatement("UPDATE Buglog SET Bug_Priority = ? " + "WHERE Bug_ID = ?");
+        UpdateBugStatus = connection.prepareStatement("UPDATE Buglog SET Bug_Status = ? " + "WHERE Bug_ID = ?");
+
+
+
+//SQl Statements------------------------BUG's Conversations---------------------------------
         
-    /*
-    This section deals with the interation of Bug with Converstions
-    */    
         insertBugConvo = connection.prepareStatement("INSERT INTO Bug_Conversation(Bug_ID, Bug_Conversation_Comment, Bug_Conversation_Owner, Bug_Conversation_Time_Added)" + "VALUES (?,?,?,?)");
 
        selectBugConvo = connection.prepareCall("SELECT Bug_Conversation_ID, Bug_ID,Bug_Conversation_Comment,Bug_Conversation_Owner, Bug_Conversation_Time_Added FROM Bug_Conversation");
@@ -69,6 +84,8 @@ public Bug()
 
     // Methods to Communcate to Database
     // This methond takes the data a user has entered and pushes it to the Database
+
+//--------------------------------------BUG Log Methods-------------------------
 public int setBugs(String addBug_Title, String addBug_Owner,String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added, String addBug_Status)
 {
     int result=0;
@@ -121,6 +138,106 @@ public String getBugTitle()
 }
 
 
+//---------------------------------SQL BUG Update Methods--------------------------------
+public int UpdateBugTitle(String UpdateBug_Title, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugTitle.setString(1, UpdateBug_Title);
+        UpdateBugTitle.setString(2, Bug_ID);
+       
+        result = UpdateBugTitle.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+
+
+public int UpdateBugDescription(String UpdateBug_Description, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugDescription.setString(1, UpdateBug_Description);
+        UpdateBugDescription.setString(2, Bug_ID);
+       
+        result = UpdateBugDescription.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int UpdateBugPriority(String UpdateBug_Priority, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugPriority.setString(1, UpdateBug_Priority);
+        UpdateBugPriority.setString(2, Bug_ID);
+       
+        result = UpdateBugPriority.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int UpdateBugStatus(String UpdateBug_Status, String Bug_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateBugStatus.setString(1, UpdateBug_Status);
+        UpdateBugStatus.setString(2, Bug_ID);
+       
+        result = UpdateBugStatus.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//--------------------------------BUG Conversation Methods--------------------------------
 public int setBugConvo(int addBug_ID, String addBugConvo_Comment,String addBugConvo_Owner, Timestamp addBug_Date_Added)
 {
     int result=0;
@@ -216,26 +333,29 @@ public String getBugConvo_Bug_ID()
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
+      out.write('\r');
       out.write('\n');
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("<!DOCTYPE html>\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("<!DOCTYPE html>\r\n");
+      out.write('\r');
       out.write('\n');
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("\n");
-      out.write("<!DOCTYPE html>\n");
-      out.write("<html>\n");
-      out.write("    <head>\n");
-      out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("\r\n");
+      out.write("<!DOCTYPE html>\r\n");
+      out.write("<html>\r\n");
+      out.write("    <head>\r\n");
+      out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n");
       out.write("        ");
 
             String bugid = request.getParameter("search_bug_id").toString();
             String Bug_Name=null;
+            String Bug_Description=null;
             Bug bug = new Bug();
             ResultSet bugtitleretrieve=bug.getBug();
             
@@ -244,14 +364,15 @@ public String getBugConvo_Bug_ID()
                 if(bugtitleretrieve.getString("Bug_ID").toString().trim().equals(bugid.trim()))
                 {
                     Bug_Name = bugtitleretrieve.getString("Bug_Title");
+                    Bug_Description = bugtitleretrieve.getString("Bug_Description");
                 }
             }
         
-      out.write("\n");
-      out.write("        <title>< Bug Conversation</title>\n");
-      out.write("    </head>\n");
-      out.write("    \n");
-      out.write("    <body>\n");
+      out.write("\r\n");
+      out.write("        <title>Bug Conversation</title>\r\n");
+      out.write("    </head>\r\n");
+      out.write("    \r\n");
+      out.write("    <body>\r\n");
       out.write("        ");
 
             int results=0; 
@@ -284,77 +405,80 @@ public String getBugConvo_Bug_ID()
                 }
             }
         
-      out.write("\n");
-      out.write("        \n");
+      out.write("\r\n");
+      out.write("        \r\n");
       out.write("        <h1>");
-      out.print( Bug_Name );
-      out.write(" Conversation</h1>\n");
-      out.write("        \n");
-      out.write("        <form name=\"Reload\" action=\"Bug_Conversation\">\n");
+      out.print(Bug_Name );
+      out.write("'s Conversation</h1>\r\n");
+      out.write("        <h2>Description</h2>\r\n");
+      out.write("        <h2>");
+      out.print(Bug_Description );
+      out.write("</h2>\r\n");
+      out.write("        <form name=\"Reload\" action=\"Bug_Conversation\">\r\n");
       out.write("            ");
  
                 while(bugsconvo.next())     
                 {// if bug tilte matches the search bug title retrieve all information
-                    if (bugsconvo.getString("Bug_ID").toString().trim().equals(bugid.trim())) 
-                        {
-                            
-                        }
+                    if (bugsconvo.getString("Bug_ID").toString().trim().equals(bugid.trim()))
+                    {
             
-      out.write("\n");
-      out.write("                            <table border=\"0\">\n");
-      out.write("                                <tbody>\n");
-      out.write("                                    <tr>\n");
-      out.write("                                        <td>");
+      out.write("\r\n");
+      out.write("                        <table border=\"0\">\r\n");
+      out.write("                            <tbody>\r\n");
+      out.write("                                <tr>\r\n");
+      out.write("                                    <td>");
       out.print( bugsconvo.getString("Bug_Conversation_Comment") );
-      out.write("</td>\n");
-      out.write("                                        <td>");
+      out.write("</td>\r\n");
+      out.write("                                    <td>");
       out.print( bugsconvo.getString("Bug_Conversation_Owner") );
-      out.write("</td>\n");
-      out.write("                                        <td>");
+      out.write("</td>\r\n");
+      out.write("                                    <td>");
       out.print( bugsconvo.getString("Bug_Conversation_Time_Added") );
-      out.write("</td>\n");
-      out.write("                                    </tr>\n");
-      out.write("                                </tbody>\n");
-      out.write("                            </table>\n");
+      out.write("</td>\r\n");
+      out.write("                                </tr>\r\n");
+      out.write("                            </tbody>\r\n");
+      out.write("                        </table>\r\n");
       out.write("            ");
 
+                    }
                 }//}
             
-      out.write("\n");
-      out.write("        </form>\n");
-      out.write("        \n");
-      out.write("        <form name=\"add_comment\" action=\"Bug_Conversation.jsp\" method=\"POST\">\n");
-      out.write("            <input type=\"text\" name=\"comment\"/>\n");
-      out.write("            <input type=\"text\" name=\"owner\" />\n");
+      out.write("\r\n");
+      out.write("        </form>\r\n");
+      out.write("        \r\n");
+      out.write("        <form name=\"add_comment\" action=\"Bug_Conversation.jsp\" method=\"POST\">\r\n");
+      out.write("            <input type=\"text\" name=\"comment\"/>\r\n");
+      out.write("            <input type=\"text\" name=\"owner\" />\r\n");
       out.write("            <input type=\"hidden\" name=\"hidden\" value=\"");
       out.print( results);
-      out.write("\" />\n");
+      out.write("\" />\r\n");
       out.write("            <input type=\"hidden\" name=\"search_bug_id\" value=");
       out.print( bugid);
-      out.write(" />\n");
-      out.write("            <input type=\"submit\" value=\"SEND\" name=\"add\" />\n");
-      out.write("            \n");
+      out.write(" />\r\n");
+      out.write("            <input type=\"submit\" value=\"SEND\" name=\"add\" />\r\n");
+      out.write("            \r\n");
       out.write("            ");
 
                 if(request.getParameter("add")!=null)
                 { 
             
-      out.write("\n");
-      out.write("                <script type=\"text/javascript\">\n");
-      out.write("                    document.forms[\"add_comment\"].submit();\n");
-      out.write("                </script> \n");
+      out.write("\r\n");
+      out.write("                <script type=\"text/javascript\">\r\n");
+      out.write("                    document.forms[\"add_comment\"].submit();\r\n");
+      out.write("                </script> \r\n");
       out.write("            ");
     
                 }
             
-      out.write("\n");
-      out.write("        </form>\n");
-      out.write("        <a href=\"Buglog_ViewDB.jsp\">\n");
-      out.write("            <input type=\"button\" value=\"Back\"/>\n");
-      out.write("        </a>\n");
-      out.write("    </body>\n");
-      out.write("     \n");
-      out.write("</html>\n");
+      out.write("\r\n");
+      out.write("        </form>\r\n");
+      out.write("        \r\n");
+      out.write("        <a href=\"Buglog_ViewDB.jsp\">\r\n");
+      out.write("            <input type=\"button\" value=\"Back\"/>\r\n");
+      out.write("        </a>\r\n");
+      out.write("    </body>\r\n");
+      out.write("     \r\n");
+      out.write("</html>\r\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;
