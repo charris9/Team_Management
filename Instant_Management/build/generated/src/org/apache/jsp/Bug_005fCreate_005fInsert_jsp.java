@@ -6,10 +6,9 @@ import javax.servlet.jsp.*;
 import java.sql.*;
 import java.sql.*;
 import java.sql.*;
-import java.util.*;
 import java.util.Date;
 
-public final class Bug_005fConversation_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class Bug_005fCreate_005fInsert_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
  public  class User
@@ -156,10 +155,7 @@ public int UpdateUserName(String updateUserName, String user_ID)
     PreparedStatement UpdateBugDescription=null;
     PreparedStatement UpdateBugPriority=null;
     PreparedStatement UpdateBugStatus=null;
-<<<<<<< HEAD
-=======
     PreparedStatement UpdateBugOwner=null;
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
     // might add date modified to here and DB
 
     PreparedStatement insertBugConvo = null;
@@ -194,11 +190,7 @@ public Bug()
         UpdateBugDescription = connection.prepareStatement("UPDATE Buglog SET Bug_Description = ? " + "WHERE Bug_ID = ?");
         UpdateBugPriority = connection.prepareStatement("UPDATE Buglog SET Bug_Priority = ? " + "WHERE Bug_ID = ?");
         UpdateBugStatus = connection.prepareStatement("UPDATE Buglog SET Bug_Status = ? " + "WHERE Bug_ID = ?");
-<<<<<<< HEAD
-
-=======
         UpdateBugOwner  = connection.prepareStatement("UPDATE Buglog SET Bug_Owner = ? " + "WHERE Bug_ID = ?");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
 
 
 //SQl Statements------------------------BUG's Conversations---------------------------------
@@ -293,9 +285,6 @@ public int UpdateBugTitle(String UpdateBug_Title, String Bug_ID)
     return result;
 }
 
-<<<<<<< HEAD
-
-=======
 public int UpdateBugOwner(String UpdateBug_Owner, String Bug_ID)
 {
     int result=0;
@@ -314,7 +303,6 @@ public int UpdateBugOwner(String UpdateBug_Owner, String Bug_ID)
    
     return result;
 }
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
 
 public int UpdateBugDescription(String UpdateBug_Description, String Bug_ID)
 {
@@ -495,26 +483,7 @@ return user;
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write('\r');
       out.write('\n');
-<<<<<<< HEAD
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("<!DOCTYPE html>\r\n");
-      out.write('\r');
-      out.write('\n');
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("\r\n");
-      out.write("<!DOCTYPE html>\r\n");
-      out.write("<html>\r\n");
-      out.write("    <head>\r\n");
-      out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\r\n");
-=======
       out.write('\n');
       out.write("\n");
       out.write("\n");
@@ -531,223 +500,169 @@ return user;
       out.write("\n");
       out.write("\n");
       out.write("\n");
+ Class.forName("com.mysql.jdbc.Driver");
       out.write("\n");
       out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
+      out.write("    \n");
       out.write("    <head>\n");
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
-      out.write("        ");
-
-            // for debug switch bugid = "1";//
-            String bugid = "1";//request.getParameter("search_bug_id").toString();
-            String Bug_Name=null;
-            String Bug_Description=null;
-            Bug bug = new Bug();
-            String UserName=null;
-            ResultSet Userretrieve=bug.user.getUser();
-            ResultSet bugtitleretrieve=bug.getBug();
-            
-            while(bugtitleretrieve.next())
-            {
-                if(bugtitleretrieve.getString("Bug_ID").toString().trim().equals(bugid.trim()))
-                {
-                    Bug_Name = bugtitleretrieve.getString("Bug_Title");
-                    Bug_Description = bugtitleretrieve.getString("Bug_Description");
-                }
-            }
-        
-<<<<<<< HEAD
-      out.write("\r\n");
-      out.write("        <title>Bug Conversation</title>\r\n");
-      out.write("    </head>\r\n");
-      out.write("    \r\n");
-      out.write("    <body>\r\n");
-=======
-      out.write("\n");
-      out.write("        <title>Bug Conversation</title>\n");
+      out.write("        <link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\">\n");
+      out.write("        <title>Inserting</title>\n");
       out.write("    </head>\n");
       out.write("    \n");
-      out.write("    <body>\n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
+      out.write("    \n");
+      out.write("    <body onload=\"displayResults()\">\n");
+      out.write("        \n");
+      out.write("        \n");
       out.write("        ");
 
-            int results=0; 
-            ResultSet bugsconvo=bug.getBugConvo();
-            String bugconvo_comment=new String();
-            String bugconvo_owner = new String(); 
-            if(request.getParameter("add")!=null)
+            int results=0;
+            Bug addBug = new Bug();
+            String UserName=null;
+            ResultSet Userretrieve=addBug.user.getUser();
+            
+            if(request.getParameter("Submit")!=null)
             {
-                Integer addbug_id= 0;
-                Date date =new Date();
-                Timestamp bugconvo_timestamp = new Timestamp(date.getTime());
-                if(request.getParameter("comment").trim() != null)
-                {   
-                    bugconvo_comment = request.getParameter("comment");
-                }
-                if(request.getParameter("owner").trim() != null)
-                {
-                    bugconvo_owner = request.getParameter("owner");
-                }
-                
-                addbug_id=Integer.parseInt(bugid);
-                
-                if(!bugconvo_comment.equals(bugconvo_owner))// will need to change this parameter
-                {
-                
-                results=bug.setBugConvo(addbug_id, bugconvo_comment, bugconvo_owner, bugconvo_timestamp);
-                }
+            String bug_title= new String();
+            String bug_owner = new String();
+            String bug_description= new String();
+            String bug_priority = new String();
+            String bug_status = new String();
+            
+           
+            if(request.getParameter("bug_title") != null)
+            {
+                bug_title = request.getParameter("bug_title");
             }
+            if(request.getParameter("bug_owner") != null)
+            {
+                bug_owner = request.getParameter("bug_owner");
+            }
+            if(request.getParameter("bug_description") != null)
+            {
+                bug_description = request.getParameter("bug_description");
+            }
+            if(request.getParameter("bug_priority") != null)
+            {
+                bug_priority = request.getParameter("bug_priority");
+            }
+            if(request.getParameter("bug_status") != null)
+            {
+                bug_priority = request.getParameter("bug_status");
+            }
+           
+            Date date =new Date();
+            Timestamp bug_timestamp = new Timestamp(date.getTime());
+            
+            bug_status="INCOMPLETE";
+            //Bug addBug = new Bug();
+            //ResultSet Userretrieve=addBug.user.getUser();
+            
+            
+            results=addBug.setBugs(bug_title, bug_owner, bug_description, bug_priority, bug_timestamp, bug_status);
+            
+            
+            } 
         
-      out.write("\r\n");
-      out.write("        \r\n");
-      out.write("        <h1>");
-      out.print(Bug_Name );
-<<<<<<< HEAD
-      out.write("'s Conversation</h1>\r\n");
-      out.write("        <h2>Description</h2>\r\n");
-      out.write("        <h2>");
-      out.print(Bug_Description );
-      out.write("</h2>\r\n");
-      out.write("        <form name=\"Reload\" action=\"Bug_Conversation\">\r\n");
-=======
-      out.write("'s Conversation</h1>\n");
-      out.write("        <h2>Description</h2>\n");
-      out.write("        <h2>");
-      out.print(Bug_Description );
-      out.write("</h2>\n");
-      out.write("        <form name=\"Reload\" action=\"Bug_Conversation\">\n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
-      out.write("            ");
- 
-                while(bugsconvo.next())     
-                {// if bug tilte matches the search bug title retrieve all information
-                    if (bugsconvo.getString("Bug_ID").toString().trim().equals(bugid.trim()))
-                    {
-            
-<<<<<<< HEAD
-      out.write("\r\n");
-      out.write("                        <table border=\"0\">\r\n");
-      out.write("                            <tbody>\r\n");
-      out.write("                                <tr>\r\n");
-      out.write("                                    <td>");
-      out.print( bugsconvo.getString("Bug_Conversation_Comment") );
-      out.write("</td>\r\n");
-      out.write("                                    <td>");
-      out.print( bugsconvo.getString("Bug_Conversation_Owner") );
-      out.write("</td>\r\n");
-      out.write("                                    <td>");
-      out.print( bugsconvo.getString("Bug_Conversation_Time_Added") );
-      out.write("</td>\r\n");
-      out.write("                                </tr>\r\n");
-      out.write("                            </tbody>\r\n");
-      out.write("                        </table>\r\n");
-=======
       out.write("\n");
-      out.write("                        <table border=\"0\">\n");
-      out.write("                            <tbody>\n");
-      out.write("                                <tr>\n");
-      out.write("                                    <td>");
-      out.print( bugsconvo.getString("Bug_Conversation_Comment") );
-      out.write("</td>\n");
-      out.write("                                    <td>");
-      out.print( bugsconvo.getString("Bug_Conversation_Owner") );
-      out.write("</td>\n");
-      out.write("                                    <td>");
-      out.print( bugsconvo.getString("Bug_Conversation_Time_Added") );
-      out.write("</td>\n");
-      out.write("                                </tr>\n");
-      out.write("                            </tbody>\n");
-      out.write("                        </table>\n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
-      out.write("            ");
-
-                    }
-                }//}
-            
-<<<<<<< HEAD
-      out.write("\r\n");
-      out.write("        </form>\r\n");
-      out.write("        \r\n");
-      out.write("        <form name=\"add_comment\" action=\"Bug_Conversation.jsp\" method=\"POST\">\r\n");
-      out.write("            <input type=\"text\" name=\"comment\"/>\r\n");
-      out.write("            <input type=\"text\" name=\"owner\" />\r\n");
-=======
-      out.write("\n");
-      out.write("        </form>\n");
+      out.write("     \n");
+      out.write("        <div class=\"main-window\">\n");
+      out.write("        <h1>Insert Data into a DB</h1>\n");
+      out.write("        <form name= \"myform\" action=\"Bug_Create_Insert.jsp\" method=\"POST\">\n");
       out.write("        \n");
-      out.write("        <form name=\"add_comment\" action=\"Bug_Conversation.jsp\" method=\"POST\">\n");
-      out.write("            <input type=\"text\" name=\"comment\"/>\n");
-      out.write("            <select name=\"owner\">\n");
-      out.write("                <option></option>\n");
-      out.write("                ");
-
-                   while (Userretrieve.next())
-                   {
-                       UserName= Userretrieve.getString("User_Name"); 
-                 
       out.write(" \n");
-      out.write("                <option>");
+      out.write("              <table border=\"0\">\n");
+      out.write("                \n");
+      out.write("                <tbody> \n");
+      out.write("                    <tr>\n");
+      out.write("                        <td>Bug Title : </td>\n");
+      out.write("                        <td><input type=\"text\" name=\"bug_title\" value=\"\" size=\"50\"  /></td>\n");
+      out.write("                        \n");
+      out.write("                    </tr>\n");
+      out.write("                    \n");
+      out.write("                    <tr>\n");
+      out.write("                        <td>Owner: </td>\n");
+      out.write("                        \n");
+      out.write("                        \n");
+      out.write("                        \n");
+      out.write("                        <td>\n");
+      out.write("                        \n");
+      out.write("                        <select name=\"bug_owner\">\n");
+      out.write("                                  <option></option>\n");
+      out.write("                                ");
+
+                                    while (Userretrieve.next()) 
+                                    {
+                                        
+                                        {
+                                            UserName= Userretrieve.getString("User_Name"); 
+                                
+      out.write(" \n");
+      out.write("                                            <option>");
       out.print(UserName );
       out.write("</option>\n");
-      out.write("                ");
-
-                    }
-                
+      out.write("                                ");
+      }
+                                    }
+                                
       out.write(" \n");
-      out.write("            </select>\n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
+      out.write("                            </select>\n");
+      out.write("                        </td>\n");
+      out.write("                        \n");
+      out.write("                        \n");
+      out.write("                    </tr>\n");
+      out.write("                    <tr>\n");
+      out.write("                        <td>Bug Description: </td>\n");
+      out.write("                        <td><input type=\"text\" name=\"bug_description\" value = \"\" size=\"50\"   /></td>\n");
+      out.write("                    </tr>\n");
+      out.write("                \n");
+      out.write("                    \n");
+      out.write("                    <tr>\n");
+      out.write("                        <td>Select Priority</td>\n");
+      out.write("                        <td>\n");
+      out.write("                            <select name=\"bug_priority\">\n");
+      out.write("                                <option></option>\n");
+      out.write("                                <option>Easy</option>\n");
+      out.write("                                <option>Medium</option>\n");
+      out.write("                                <option>Hard</option>\n");
+      out.write("                            </select>\n");
+      out.write("                        </td>\n");
+      out.write("                    </tr>\n");
+      out.write("                  \n");
+      out.write("                </tbody>\n");
+      out.write("            </table>\n");
+      out.write("            <a href=\"Buglog.jsp\">\n");
+      out.write("                <input type=\"button\" value=\"Cancel\" />\n");
+      out.write("            </a>\n");
+      out.write("            \n");
       out.write("            <input type=\"hidden\" name=\"hidden\" value=\"");
       out.print( results);
-      out.write("\" />\r\n");
-      out.write("            <input type=\"hidden\" name=\"search_bug_id\" value=");
-      out.print( bugid);
-      out.write(" />\r\n");
-      out.write("            <input type=\"submit\" value=\"SEND\" name=\"add\" />\r\n");
-      out.write("            \r\n");
-      out.write("            ");
-
-                if(request.getParameter("add")!=null)
-                { 
-            
-<<<<<<< HEAD
-      out.write("\r\n");
-      out.write("                <script type=\"text/javascript\">\r\n");
-      out.write("                    document.forms[\"add_comment\"].submit();\r\n");
-      out.write("                </script> \r\n");
-=======
-      out.write("\n");
-      out.write("                <script type=\"text/javascript\">\n");
-      out.write("                    document.forms[\"add_comment\"].submit();\n");
-      out.write("                    document.getElementById( 'bottom' ).scrollIntoView();\n");
-      out.write("                </script> \n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
-      out.write("            ");
-    
-                }
-            
-<<<<<<< HEAD
-      out.write("\r\n");
-      out.write("        </form>\r\n");
-      out.write("        \r\n");
-      out.write("        <a href=\"Buglog_ViewDB.jsp\">\r\n");
-      out.write("            <input type=\"button\" value=\"Back\"/>\r\n");
-      out.write("        </a>\r\n");
-      out.write("    </body>\r\n");
-      out.write("     \r\n");
-      out.write("</html>\r\n");
-=======
-      out.write("\n");
-      out.write("        </form>\n");
-      out.write("        \n");
-      out.write("        <a href=\"Buglog_ViewDB.jsp\">\n");
-      out.write("            <input type=\"button\" value=\"Back\"/>\n");
-      out.write("        </a>\n");
-      out.write("    </body>\n");
-      out.write("     \n");
-      out.write("</html>\n");
->>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
+      out.write("\" />\n");
+      out.write("            <input type=\"reset\" value=\"Clear\" name=\"Clear\" />\n");
+      out.write("            <input type=\"submit\" value=\"Sumbit\" name=\"Submit\"  />\n");
+      out.write("          </div>  \n");
+      out.write("           \n");
+      out.write("    \n");
+      out.write("        </form>   \n");
+      out.write("           \n");
+      out.write("            \n");
+      out.write("        <script LANGUAGE = \"JavaScript\"> \n");
+      out.write("               \n");
+      out.write("                    function displayResults()\n");
+      out.write("                    \n");
+      out.write("                    {\n");
+      out.write("                        if(document.myform.hidden.value == 1)\n");
+      out.write("                        {\n");
+      out.write("                        location='Bug_Display.jsp';     \n");
+      out.write("                         }\n");
+      out.write("                    }\n");
+      out.write("                   \n");
+      out.write("                    \n");
+      out.write("                    </script> \n");
+      out.write("    \n");
+      out.write("   </html>\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

@@ -26,6 +26,9 @@
         
         <%
             int results=0;
+            Bug addBug = new Bug();
+            String UserName=null;
+            ResultSet Userretrieve=addBug.user.getUser();
             
             if(request.getParameter("Submit")!=null)
             {
@@ -61,9 +64,13 @@
             Timestamp bug_timestamp = new Timestamp(date.getTime());
             
             bug_status="INCOMPLETE";
-            Bug addBug = new Bug();
+            //Bug addBug = new Bug();
+            //ResultSet Userretrieve=addBug.user.getUser();
+            
             
             results=addBug.setBugs(bug_title, bug_owner, bug_description, bug_priority, bug_timestamp, bug_status);
+            
+            
             } 
         %>
      
@@ -83,7 +90,28 @@
                     
                     <tr>
                         <td>Owner: </td>
-                        <td><input type="text" name="bug_owner" value="" size="50" /></td>
+                        
+                        
+                        
+                        <td>
+                        
+                            <select name="bug_owner">
+                                  <option></option>
+                                <%
+                                    while (Userretrieve.next()) 
+                                    {
+                                        
+                                        {
+                                            UserName= Userretrieve.getString("User_Name"); 
+                                %> 
+                                            <option><%=UserName %></option>
+                                <%      }
+                                    }
+                                %> 
+                            </select>
+                        </td>
+                        
+                        
                     </tr>
                     <tr>
                         <td>Bug Description: </td>
@@ -95,6 +123,7 @@
                         <td>Select Priority</td>
                         <td>
                             <select name="bug_priority">
+                                <option></option>
                                 <option>Easy</option>
                                 <option>Medium</option>
                                 <option>Hard</option>
@@ -105,7 +134,7 @@
                 </tbody>
             </table>
             <a href="Buglog.jsp">
-            <input type="button" value="Cancel" />
+                <input type="button" value="Cancel" />
             </a>
             
             <input type="hidden" name="hidden" value="<%= results%>" />

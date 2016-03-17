@@ -13,11 +13,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <%
-            String bugid = request.getParameter("search_bug_id").toString();
+            // for debug switch bugid = "1";//
+            String bugid =request.getParameter("search_bug_id").toString();
             String Bug_Name=null;
             String Bug_Description=null;
             Bug bug = new Bug();
+            String UserName=null;
+            ResultSet Userretrieve=bug.user.getUser();
             ResultSet bugtitleretrieve=bug.getBug();
             
             while(bugtitleretrieve.next())
@@ -32,7 +36,7 @@
         <title>Bug Conversation</title>
     </head>
     
-    <body>
+    <body> 
         <%
             int results=0; 
             ResultSet bugsconvo=bug.getBugConvo();
@@ -54,12 +58,9 @@
                 
                 addbug_id=Integer.parseInt(bugid);
                 
-                if(bugconvo_comment.equals(bugconvo_owner))// will need to change this parameter
+                if(!bugconvo_comment.equals(bugconvo_owner))// will need to change this parameter
                 {
-                    
-                }
-                else
-                {
+                
                 results=bug.setBugConvo(addbug_id, bugconvo_comment, bugconvo_owner, bugconvo_timestamp);
                 }
             }
@@ -92,7 +93,18 @@
         
         <form name="add_comment" action="Bug_Conversation.jsp" method="POST">
             <input type="text" name="comment"/>
-            <input type="text" name="owner" />
+            <select name="owner">
+                <option></option>
+                <%
+                   while (Userretrieve.next())
+                   {
+                       UserName= Userretrieve.getString("User_Name"); 
+                 %> 
+                <option><%=UserName %></option>
+                <%
+                    }
+                %> 
+            </select>
             <input type="hidden" name="hidden" value="<%= results%>" />
             <input type="hidden" name="search_bug_id" value=<%= bugid%> />
             <input type="submit" value="SEND" name="add" />
@@ -103,6 +115,7 @@
             %>
                 <script type="text/javascript">
                     document.forms["add_comment"].submit();
+                    
                 </script> 
             <%    
                 }

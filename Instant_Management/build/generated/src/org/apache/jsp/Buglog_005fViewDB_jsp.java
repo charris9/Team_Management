@@ -5,15 +5,142 @@ import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import java.sql.*;
 import java.sql.*;
+import java.sql.*;
 
 public final class Buglog_005fViewDB_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
+
+ public  class User
+{
+    String URL2="jdbc:mysql://localhost:3306/Testing";
+    String USERNAME2="root";
+    String PASSWORD2 ="password";
+    
+    // intialization of all variables
+    Connection connection2 = null;
+    PreparedStatement insertUser = null;
+    PreparedStatement selectUser = null;
+    PreparedStatement selectUserName = null;
+    PreparedStatement UpdateUserName = null;
+    ResultSet resultSet = null;
+    String resultString ="";
+
+public User()
+{
+    try
+        {
+        // used to create a connection to the Database
+        connection2= DriverManager.getConnection(URL2, USERNAME2, PASSWORD2);
+        /*
+        all prepared statements are defined here
+        Criteria to add new prepared statement:
+        1) Create unique variable at the top of the bug class
+        2) Create a connect.prepareStatement(what the variable will do)
+        3) Create method that uses the new variable
+        */
+
+//SQl Statements------------------------User---------------------------------
+        insertUser=connection2.prepareStatement("INSERT INTO Owner(Owner_Name)"
+        + "VALUES (?)"); 
+
+        selectUser = connection2.prepareCall("SELECT Owner_ID, Owner_Namer From Owner");
+        UpdateUserName = connection2.prepareStatement("UPDATE Owner SET Owner_Namer = ? " + "WHERE Owner_ID = ? ");
+        
+
+
+
+    }
+              
+    catch(SQLException e)
+        {
+        e.printStackTrace();
+        }
+}
+
+    // Methods to Communcate to Database
+    // This methond takes the data a user has entered and pushes it to the Database
+
+//--------------------------------------BUG Log Methods-------------------------
+public int setUser(String addUser)
+{
+    int result=0;
+    try 
+    {
+        insertUser.setString(1, addUser);
+        
+        result = insertUser.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+            // This method retrives all the infromation associate with a specific Bug
+public ResultSet getUser()
+{
+    try
+        {
+            resultSet = selectUser.executeQuery();
+        }
+    catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    return resultSet;
+}
+
+// This Method retrieves the Bug Tilte from the Database
+public String getUserName()
+{
+    try
+    {
+        resultSet = selectUserName.executeQuery();
+        resultString=resultSet.getString("User_Name From User");
+    }
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+    
+    return resultString;
+}
+
+
+//---------------------------------SQL BUG Update Methods--------------------------------
+public int UpdateUserName(String updateUserName, String user_ID)
+{
+    int result=0;
+    try 
+    {
+        UpdateUserName.setString(1, updateUserName);
+        UpdateUserName.setString(2, user_ID);
+       
+        result = UpdateUserName.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+
+
+
+
+}
 
  public  class Bug
 {
     String URL="jdbc:mysql://localhost:3306/Testing";
     String USERNAME="root";
     String PASSWORD ="password";
+    //User user = new User();
     
     // intialization of all variables
     Connection connection = null;
@@ -290,6 +417,7 @@ public String getBugConvo_Bug_ID()
 
 
 
+
 }
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -297,8 +425,9 @@ public String getBugConvo_Bug_ID()
   private static java.util.List<String> _jspx_dependants;
 
   static {
-    _jspx_dependants = new java.util.ArrayList<String>(1);
+    _jspx_dependants = new java.util.ArrayList<String>(2);
     _jspx_dependants.add("/Bug_DBconfig.jsp");
+    _jspx_dependants.add("/User_DBconfig.jsp");
   }
 
   private org.glassfish.jsp.api.ResourceInjector _jspx_resourceInjector;
@@ -333,12 +462,29 @@ public String getBugConvo_Bug_ID()
 
       out.write('\r');
       out.write('\n');
+<<<<<<< HEAD
       out.write("\r\n");
       out.write("\r\n");
       out.write("\r\n");
       out.write("\r\n");
       out.write("<!DOCTYPE html>\r\n");
       out.write('\r');
+=======
+      out.write('\n');
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write('\n');
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write('\n');
+      out.write('\n');
+>>>>>>> fc022ac4fe0347801a29eea9f3d0ebe1cf85e17e
       out.write('\n');
       out.write("\r\n");
       out.write("\r\n");
