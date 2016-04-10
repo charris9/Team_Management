@@ -25,10 +25,12 @@
             //Initializing all variables
             String Bug_Name=null;
             String Bug_Description=null;
-            Bug bug = new Bug();
             String UserName=null;
+            String StoryID=null;
             
-          
+            
+            Bug bug = new Bug();
+           
             ResultSet Userretrieve=bug.user.getUser();
             ResultSet bugtitleretrieve=bug.getBug();
             
@@ -40,6 +42,7 @@
                 {
                     Bug_Name = bugtitleretrieve.getString("Bug_Title");
                     Bug_Description = bugtitleretrieve.getString("Bug_Description");
+                    StoryID = bugtitleretrieve.getString("Story_ID");
                 }
             }
         %>
@@ -51,8 +54,9 @@
             
             int results=0; 
             ResultSet bugsconvo=bug.getBugConvo();
-            String bugconvo_comment=new String();
-            String bugconvo_owner = new String(); 
+            
+            String bugconvo_comment=null;
+            String bugconvo_owner = null; 
             
             // if submit name add for form "add_comment" is not null
             if(request.getParameter("add")!=null)
@@ -120,7 +124,7 @@
                    {
                        UserName= Userretrieve.getString("User_Name"); 
                  %> 
-                <option><%=UserName %></option>
+                       <option><%=UserName %></option>
                 <%
                     }
                 %> 
@@ -134,6 +138,7 @@
                 { 
             %>
                 <script type="text/javascript">
+                    //might have to add closes in heree
                     document.forms["add_comment"].submit();
                     
                 </script> 
@@ -142,9 +147,18 @@
             %>
         </form>
         
-        <a href="Buglog_ViewDB.jsp">
-            <input type="button" value="Back"/>
-        </a>
+        <form name="CreateBug3" action="Buglog_ViewDB.jsp" method="POST" >
+          <input type="hidden" value="<%=StoryID%>" name="search_story_id"/>
+          <input type="submit" value="Back" name="search_story_id2" />
+                        
+        </form>   
+    
+        
+        
+    
     </body>
-     
+    
+     <%
+        bug.user.closeCONN(); 
+        bug.closeCONN();%> 
 </html>

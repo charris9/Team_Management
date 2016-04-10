@@ -16,7 +16,7 @@
 <!DOCTYPE html>
 <%! public  class User
 {
-     String URL="jdbc:mysql://teamim.cu2o8kpzcooo.us-west-2.rds.amazonaws.com:3306/TeamInstantManagement";//jdbc:mysql://localhost:3306/Testing";
+     String URL="jdbc:mysql://teaminstantmanagement.cu2o8kpzcooo.us-west-2.rds.amazonaws.com:3306/TeamInstantManagement";//jdbc:mysql://localhost:3306/Testing";
     String USERNAME="TeamIM";//"root";//TeamIM
    String PASSWORD ="BUCS673SPR";//password";//BUCS673SPR
    
@@ -93,10 +93,6 @@ public ResultSet getUser()
 {
     try
         {
-        
-
-            connection= DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            selectUser = connection.prepareStatement("SELECT User_ID,User_Name From User");
             resultSet = selectUser.executeQuery();
         }
     catch(SQLException e)
@@ -111,8 +107,6 @@ public String getUserName()
 {
     try
     {
-        connection= DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        resultSet = selectUserName.executeQuery();
         resultString=resultSet.getString("User_Name From User");
     }
     catch(SQLException e)
@@ -145,6 +139,10 @@ public int UpdateUserName(String updateUserName, String user_ID)
 }
 
 
+public void closeCONN() throws SQLException
+{
+    connection.close();
+}
 
 
 

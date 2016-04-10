@@ -27,6 +27,7 @@
         String Bug_Priority=null;
         String Bug_Status = null;
         String Bug_DateAdded =null;
+        String StoryID=null;
         
         String Priority1=null;
         String Priority2=null;
@@ -55,6 +56,7 @@
                 Bug_Priority=bugretrieve.getString("Bug_Priority");
                 Bug_Status = bugretrieve.getString("Bug_Status");
                 Bug_DateAdded = bugretrieve.getString("Bug_Date_Added");
+                StoryID=bugretrieve.getString("Story_ID");
             }
         }   
     %>
@@ -181,13 +183,24 @@
     <input type="hidden" value="<%=Bug_Owner %>" name="DB_Bugowner" />
     <input type="hidden" value="<%=Bug_Description%>" name="DB_Bugdescription" />
     <input type="hidden" value="<%=Bug_Priority %>" name="DB_Bugpriority" />                
-    <input type="hidden" value="<%=Bug_Status %>" name="DB_Bugstatus" />   
-        
-    <input type="submit" value="Save" name="Update_Values" />
+    <input type="hidden" value="<%=Bug_Status %>" name="DB_Bugstatus" /> 
+    <input type="hidden" value="<%=StoryID %>" name="Story_ID" /> 
     
-    <a href="Buglog_ViewDB.jsp">
-        <input type="button" value="Finished" name="Finish" />
-    </a>  
+    <table border="0">
+        <tbody>
+            <tr>
+                <td><input type="submit" value="Save" name="Update_Values" /> </td>
+                
+    
+    
+    
+    
+    
+    
+    <%
+    //<a href="Buglog_ViewDB.jsp">
+     //   <input type="button" value="Finished" name="Finish" />
+    //</a>  %>
         
         
         
@@ -201,7 +214,24 @@
         <%    
             }
         %>
+   <td>
+            
+    
+    
     </form>
+    
+        <form name="CreateBug3" action="Buglog_ViewDB.jsp" method="POST" >
+          <input type="hidden" value="<%=StoryID%>" name="search_story_id"/>
+          <input type="submit" value="Finished" name="search_story_id2" />
+                        
+        </form>
+       </td>
+    </tr>  
+    </tbody>
+    </table>
+       
+    
+    
         <%//
         if  (request.getParameter("Update_Values")!=null) 
         {
@@ -239,5 +269,9 @@
         
         
     <body>
-
+        
+        
+<%
+    bug.user.closeCONN();
+    bug.closeCONN();%> 
 </html>

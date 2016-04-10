@@ -1,5 +1,5 @@
 <%-- 
-    Document   : Bud_DBconfig
+    Document   : Bug_DBconfig
     Created on : Feb 18, 2016, 8:26:33 PM
     Author     : caseyharris
 
@@ -12,6 +12,7 @@
 
 --%>
 <%@include file ="User_DBconfig.jsp"%>
+<%@include file ="Story_DBconfig.jsp" %>
 <%@page import="java.sql.*"%>
 <%@page import="java.sql.Connection"%>
 <%Class.forName("com.mysql.jdbc.Driver");%>
@@ -23,7 +24,7 @@
 
 public  class Bug
 {
-    String URL="jdbc:mysql://teamim.cu2o8kpzcooo.us-west-2.rds.amazonaws.com:3306/TeamInstantManagement";//jdbc:mysql://localhost:3306/Testing";
+    String URL="jdbc:mysql://teaminstantmanagement.cu2o8kpzcooo.us-west-2.rds.amazonaws.com:3306/TeamInstantManagement";//jdbc:mysql://localhost:3306/Testing";
 
     String USERNAME="TeamIM";//root";//TeamIM
     String PASSWORD ="BUCS673SPR";//password";//BUCS673SPR
@@ -34,6 +35,8 @@ public  class Bug
     // intialization of all variables
     Connection connection=null;
 
+    PreparedStatement setStoryID=null;
+    PreparedStatement getStoryID=null;
     PreparedStatement insertBug=null;
     PreparedStatement selectBug=null;
     PreparedStatement selectBugTitle=null;
@@ -50,7 +53,7 @@ public  class Bug
     PreparedStatement insertBugConvo = null;
     PreparedStatement selectBugConvo = null;
     PreparedStatement selectBugConvo_Bug_ID = null;
- 
+    
 
 
 
@@ -74,10 +77,17 @@ public Bug() //throws SQLException
         
 
 //SQl Statements------------------------BUG LOG---------------------------------
-          insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title,Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added,Bug_Status)"
-        + "VALUES (?,?,?,?,?,?)");
+setStoryID = connection.prepareStatement("INSERT INTO Buglog(Story_ID)" + "VALUES (?)");
 
-        selectBug = connection.prepareStatement("SELECT Bug_ID, Bug_Title,Bug_Owner,Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status From Buglog;");
+getStoryID = connection.prepareStatement("SELECT Story_ID FROM Buglog;");
+
+
+
+
+          insertBug=connection.prepareStatement("INSERT INTO Buglog(Bug_Title,Bug_Owner,Bug_Description,Bug_Priority,Bug_Date_Added,Bug_Status, Story_ID)"
+        + "VALUES (?,?,?,?,?,?,?)");
+
+        selectBug = connection.prepareStatement("SELECT Bug_ID, Bug_Title,Bug_Owner,Bug_Description, Bug_Priority, Bug_Date_Added, Bug_Status, Story_ID From Buglog;");
                     
         selectBugTitle = connection.prepareStatement("SELECT Bug_title From Buglog"); //Might want to add From BugLog 
 
@@ -112,11 +122,42 @@ public Bug() //throws SQLException
 //--------------------------------------BUG Log Methods-------------------------
 public String getUsername()
 {
-return USERNAME;
+    return USERNAME;
 }
 
 
-public int setBugs(String addBug_Title, String addBug_Owner,String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added, String addBug_Status)
+public ResultSet getStoryID()
+{
+try
+        {
+            resultSet = getStoryID.executeQuery();
+        }
+    catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    return resultSet;
+}
+
+public int setStoryID(String addStory_ID)
+{
+    int result=0;
+    try 
+    {
+        setStoryID.setString(8, addStory_ID);
+        
+        result = setStoryID.executeUpdate();
+    }   
+
+    catch(SQLException e)
+    {
+        e.printStackTrace();
+    }
+   
+    return result;
+}
+
+public int setBugs(String addBug_Title, String addBug_Owner,String addBug_Description, String addBug_Priority, Timestamp addBug_Date_Added, String addBug_Status, String addStory_ID)
 {
     int result=0;
     try 
@@ -127,6 +168,7 @@ public int setBugs(String addBug_Title, String addBug_Owner,String addBug_Descri
         insertBug.setString(4, addBug_Priority);
         insertBug.setTimestamp(5, addBug_Date_Added);
         insertBug.setString(6, addBug_Status);
+        insertBug.setString(7, addStory_ID);
         result = insertBug.executeUpdate();
     }   
 
@@ -340,7 +382,11 @@ public String getBugConvo_Bug_ID()
     return resultString;
 }
 
-
+public void closeCONN() throws SQLException
+{
+user.connection.close();
+connection.close();
+}
 
 }
 %>

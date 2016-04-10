@@ -15,37 +15,53 @@
         <title>All Bugs</title>
     </head>
     
+    <% 
+        String story_id =request.getParameter("search_story_id").toString();
+        
+        String Story_Title=null;
+        String Story_Description=null;
+        
+        Story Temp_Story = new Story();
+        Bug bug = new Bug();
+        
+        ResultSet bugs=bug.getBug();
+        ResultSet storytitleretrieve=Temp_Story.getStory();
+
+        //iterates through the DB of all the bug titles
+        while(storytitleretrieve.next())
+        {
+            //if bug id match the search id from bug_search.jsp retreive all that bugs data
+            if(storytitleretrieve.getString("Story_ID").toString().trim().equals(story_id.trim()))
+            {
+                Story_Title = storytitleretrieve.getString("Story_Title");
+                Story_Description = storytitleretrieve.getString("Story_Description");
+            }
+        }
+    %>
+    
     <body>
-        <h1>("Story's Name) + Total Bugs From Data Base</h1>
+        <h1><%= Story_Title %>'s + Bugs From Data Base</h1>
         <table border="0">
             <thead>
                 <tr>
                     <td>
-                        <form name="CreateBug" action="Bug_Create_Insert.jsp">
-                        <input type="submit" value="Add Bug" name="Add Bug" />
-                        </form>
+                        <form name="CreateBug2" action="Buglog.jsp" method="POST" >
+                            <input type="hidden" value="<%=story_id%>" name="search_story_id"/>
+                            <input type="submit" value="Cancel" name="search_story_id2" />
+                        </form>  
+                        
                     </td>
-                    <td>
-                        <form name="Bug Log" action="Buglog.jsp" >
-                        <input type="submit" value="Back" name="Back" />
-                        </form>
-                    </td>
-                </tr>
                     
-            </thead>
-            
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <form name="CreateBug" action="Bug_Create_Insert.jsp" method="POST" >
+                            <input type="hidden" value="<%=story_id %>" name="Story_ID" />
+                            <input type="submit" value="Add Bug" name="Add Bug" />
+                        </form>
+                    </td>
                 </tr>
-            </tbody>
-            </table>
+            </thead>
+        </table>
         
-        <%
-            Bug bug = new Bug();
-            ResultSet bugs=bug.getBug();
-        %>
         <table border="1">
             <tbody>
                 <tr>
@@ -54,26 +70,38 @@
                     <td>Date Created</td>
                     <td>Status</td>
                 </tr>
-                
+               
                 <% 
+                    // need to have match story id
                     while (bugs.next()) 
-                    { 
+                    {
+                        bugs.getString("Story_ID");
+                        
+                        if(bugs.getString("Story_ID").trim().equals(story_id.trim()))
+                        {
                 %>
-                <tr>
-                <form name="Find_Bug" action="Bug_Search.jsp" method="POST">
-                    <td>
-                        <input type="submit"
-                           style="height:25px; width:500px" 
-                           value="<%= bugs.getString("Bug_Title") %> "
-                           name="search_title"/>
-                    </td>
-                </form>
-                    <td><%= bugs.getString("Bug_Priority") %></td>
-                    <td><%= bugs.getString("Bug_Date_Added") %></td>
-                    <td><%= bugs.getString("Bug_Status") %></td>
-                </tr>
-                <%  }%>
+                            <tr>
+                                <form name="Find_Bug" action="Bug_Search.jsp" method="POST">
+                                    <td>
+                                        <input type="submit"
+                                        style="height:25px; width:500px" 
+                                        value="<%= bugs.getString("Bug_Title") %> "
+                                        name="search_title"/>
+                                    </td>
+                                    <td><%= bugs.getString("Bug_Priority") %></td>
+                                    <td><%= bugs.getString("Bug_Date_Added") %></td>
+                                    <td><%= bugs.getString("Bug_Status") %></td>
+                                </form>
+                            </tr>
+                <%      }
+                    }
+                %>
             </tbody>
         </table>
+    <%
+        bug.closeCONN(); 
+        Temp_Story.closeCONN();
+        
+    %>
     </body>
 </html>

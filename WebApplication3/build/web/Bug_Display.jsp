@@ -25,55 +25,72 @@
         <div class="main-window">
         <h1>Bug Created!</h1>
         
-        <% Bug bug = new Bug();
-         ResultSet bugs=bug.getBug();
-         // when the database is at its last entry return that bug.
-        if (bugs.last()) 
-        {  %>
+        <%
+            String StoryID=null;   
+            Bug bug = new Bug();
+            ResultSet bugs=bug.getBug();
+            // when the database is at its last entry return that bug.
+            if (bugs.last()) 
+            {  
+        %>
         
-       <table border="1">
-                 <tbody>
-                    <tr>
-                        <td>Bug Title: </td>
-                        <td><%= bugs.getString("Bug_Title") %></td>
-                    </tr>
+                <table border="1">
+                    <tbody>
+                        <tr>
+                            <td>Bug Title: </td>
+                            <td><%= bugs.getString("Bug_Title") %></td>
+                        </tr>
                     
-                    <tr>
-                        <td>Owner: </td>
-                        <td><%= bugs.getString("Bug_Owner") %></td>
-                    </tr>
+                        <tr>
+                            <td>Owner: </td>
+                            <td><%= bugs.getString("Bug_Owner") %></td>
+                        </tr>
                     
-                    <tr>
-                        <td>Description: </td>
-                        <td><%= bugs.getString("Bug_Description") %></td>
-                    </tr>
+                        <tr>
+                            <td>Description: </td>
+                            <td><%= bugs.getString("Bug_Description") %></td>
+                        </tr>
                     
-                    <tr>
-                        <td>Priority:</td>
-                        <td><%= bugs.getString("Bug_Priority") %></td>
-                    </tr>
+                        <tr>
+                            <td>Priority:</td>
+                            <td><%= bugs.getString("Bug_Priority") %></td>
+                        </tr>
                     
-                    <tr>
-                        <td>Current Status:</td>
-                        <td><%= bugs.getString("Bug_Status") %></td>
-                    </tr>
-                    <tr>
-                        <td>Date Created:</td>
-                        <td><%= bugs.getString("Bug_Date_Added") %></td>
-                    </tr>
+                        <tr>
+                            <td>Current Status:</td>
+                            <td><%= bugs.getString("Bug_Status") %></td>
+                        </tr>
+                        <tr>
+                            <td>Date Created:</td>
+                            <td><%= bugs.getString("Bug_Date_Added") %></td>
+                        </tr>
                     
+                        <%StoryID=bugs.getString("Story_ID");%>
+                    </tbody>
+                </table>
+        <%  } 
+        %>   
+           
+            <table>   
+                <tbody>
+                    <tr>
+                        <td>
+                            <form name="CreateBug" action="Bug_Create_Insert.jsp" method="POST" >
+                                <input type="hidden" value="<%=StoryID%>" name="Story_ID"/>
+                                <input type="submit" value="Add Another Bug" name="Add Bug" />
+                            </form>   
+                        </td>
+           
+                        <td>
+                            <form name="CreateBug2" action="Buglog.jsp" method="POST" >
+                                <input type="hidden" value="<%=StoryID%>" name="search_story_id"/>
+                                <input type="submit" value="Continue" name="search_story_id2" />
+                            </form>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-        
-    <% } %>   
-          
-            <a href="Bug_Create_Insert.jsp">
-            <input type="button" value="Add Another Bug"/>
-            </a>
-         
-            <a href="Buglog.jsp">
-            <input type="button" value="Continue"/>
-            </a>
-    </div>      
-   </body>
+        </div>
+    </body>
+    <%bug.closeCONN();%> 
 </html>

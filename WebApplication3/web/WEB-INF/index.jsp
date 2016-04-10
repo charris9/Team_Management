@@ -13,8 +13,8 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <form name="ViewBugs" action="Buglog.jsp" >
-        <input type="submit" value="To Buglog" name="Bug_Log" />
+        <form name="ViewBugs" action="Storylog.jsp" >
+        <input type="submit" value="To Storylog" name="Bug_Log" />
         </form>
     </body>
 </html>
