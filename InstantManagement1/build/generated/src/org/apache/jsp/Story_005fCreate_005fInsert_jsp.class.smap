@@ -1,0 +1,37 @@
+SMAP
+Story_005fCreate_005fInsert_jsp.java
+JSP
+*S JSP
+*F
++ 0 Story_Create_Insert.jsp
+Story_Create_Insert.jsp
++ 1 Story_DBconfig.jsp
+Story_DBconfig.jsp
++ 2 User_DBconfig.jsp
+User_DBconfig.jsp
+*L
+5,2:392
+17:394
+5#1,2:395
+16:397
+5#2,2:398
+14,6:400
+19,2:405,2
+21,6:409
+26,139:15
+164:414
+17#1,4:415
+20:418,2
+21,3:420
+23,198:154
+220,5:422
+18#0,4:426
+21:429,2
+22,15:431
+37,50:447
+86,48:497
+134:545,3
+135,12:548
+147:560,3
+148,3:563
+*E
