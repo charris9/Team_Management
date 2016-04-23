@@ -1,0 +1,36 @@
+/* 
+    Created on : Feb 18, 2016, 12:54:06 AM
+    Author     : hieu
+*/
+
+.wrapper {
+    width: 750px;
+    margin: 0;
+    background: #dbdbdb;
+    border: 2px solid #dbdbdb;
+    border-radius: 3px;
+}
+
+.main-window {
+    text-align: center;
+    color: firebrick;
+    font-weight: bold;
+    margin: 0 auto;
+    width: 560px;
+    background: #dbdbdb;
+    background-image: url(transparent_bug_1.png);
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.button {
+    border: 1px solid;
+    border-radius: 3px;
+}
+
+.button:hover {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    background: dodgerblue;
+}
